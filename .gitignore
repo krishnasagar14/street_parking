@@ -7,3 +7,6 @@ db.sqlite
 
 # django migrations
 **/migrations/**
+
+# IDE directories
+.idea/
