@@ -65,6 +65,10 @@ class Default(Configuration):
         'corsheaders',
         'django_filters',
         'django_extensions',
+
+        'apps.user',
+        'apps.authentication',
+        'apps.reservations',
     ]
 
     MIDDLEWARE = [
