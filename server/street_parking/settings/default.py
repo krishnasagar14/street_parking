@@ -63,6 +63,7 @@ class Default(Configuration):
 
         'rest_framework',
         'corsheaders',
+        'drf_yasg',
         'django_filters',
         'django_extensions',
 
@@ -172,7 +173,7 @@ class Default(Configuration):
     VERSION = 'v19.02.24'
     DESCRIPTION = 'Street parking reservation service'
     CONTACT = 'pagesagar@gmail.com'
-    BASE_URL = 'localhost:8000'
+    BASE_URL = 'http://localhost:8000'
 
     # django Logging config
 
@@ -228,5 +229,5 @@ class Default(Configuration):
             'rest_framework.throttling.AnonRateThrottle',
             'rest_framework.throttling.UserRateThrottle',
         ),
-        'EXCEPTION_HANDLER': 'core.exceptionHandlers.ApplnExceptionHandler',
+        'EXCEPTION_HANDLER': 'core.exceptionsHandlers.ApplnExceptionHandler',
     }
