@@ -14,8 +14,42 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework import permissions
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+
+V0_API_PATH = 'api/v0/'
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title=settings.APPLICATION_NAME,
+        default_version=settings.VERSION,
+        description=settings.DESCRIPTION,
+        contact=openapi.Contact(email=settings.CONTACT),
+        license=openapi.License('MIT')
+    ),
+    validators=['flex', 'ssv'],
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+    authentication_classes=(),
+    url=settings.BASE_URL
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('{}auth/'.format(V0_API_PATH), include('apps.authentication.urls', 'authentication'))
 ]
+
+urlpatterns.append(
+    re_path(r'^swagger(?P<format>\.josn|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json')
+)
+urlpatterns.append(
+    re_path(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+)
+urlpatterns.append(
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+)
+urlpatterns += staticfiles_urlpatterns()
