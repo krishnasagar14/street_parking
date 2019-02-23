@@ -228,5 +228,5 @@ class Default(Configuration):
             'rest_framework.throttling.AnonRateThrottle',
             'rest_framework.throttling.UserRateThrottle',
         ),
-        'EXCEPTION_HANDLER': '',
+        'EXCEPTION_HANDLER': 'core.exceptionHandlers.ApplnExceptionHandler',
     }
