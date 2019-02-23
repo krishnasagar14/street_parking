@@ -66,10 +66,14 @@ class Default(Configuration):
         'django_filters',
         'django_extensions',
 
+        'common',
+        'core',
         'apps.user',
         'apps.authentication',
         'apps.reservations',
     ]
+
+    AUTH_USER_MODEL = 'user.User'
 
     MIDDLEWARE = [
         'corsheaders.middleware.CorsMiddleware',
@@ -218,7 +222,7 @@ class Default(Configuration):
             'rest_framework.parsers.MultiPartParser',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            '',
+            'apps.authentication.authSchemes.BearerAuthentication',
         ),
         'DEFAULT_THROTTLE_CLASSES': (
             'rest_framework.throttling.AnonRateThrottle',
