@@ -38,7 +38,7 @@ class StreetSpotReservation(AppResponse, GenericAPIView):
         except Exception as e:
             return _response_400()
         try:
-            time_period = request.data['duration']
+            time_period = int(request.data['duration'])
         except Exception as e:
             return _response_400('NO_DURATION_FOUND')
         if time_period <= 0:
