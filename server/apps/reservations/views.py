@@ -81,7 +81,8 @@ class ViewReservations(AppResponse, GenericAPIView):
             result['duration'] = r_obj.duration
             result['spot_id'] = r_obj.spot.id
             result['spot_cost_per_hr'] = r_obj.spot.cost_per_hr
-            total_cost += (r_obj.duration * r_obj.spot.cost_per_hr)
+            result['cost_per_spot'] = (r_obj.duration * r_obj.spot.cost_per_hr)
+            total_cost += result['cost_per_spot']
             res.append(result)
         output['total_cost'] = total_cost
         output['spots'] = res

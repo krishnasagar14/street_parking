@@ -8,6 +8,7 @@ class ReserveSpotSerializer(serializers.Serializer):
     duration = serializers.IntegerField(help_text='Duration for each spot booked')
     spot_id = serializers.CharField(help_text='Spot ID booked')
     spot_cost_per_hr = serializers.IntegerField(help_text='Booked spot cost per hour')
+    cost_per_spot = serializers.IntegerField(help_text='Cost value for per booked spot')
 
 class ReservationsSerializer(serializers.Serializer):
     total_cost = serializers.IntegerField(help_text='Total cost of reservations occupied by user')
