@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from core.views import AppResponse
 from common.serializers import GenericRespSerializer
 from common.parameters import auth
-from .serializers import ReserveSpotSerializer
+from .serializers import ReserveSpotSerializer, ReservationsViewSerializer
 from apps.parkSpot.models import parkingSpot
 from .models import Reservations
 
@@ -59,4 +59,30 @@ class StreetSpotReservation(AppResponse, GenericAPIView):
         spot_obj.save()
 
         output['message'] = 'SPOT_RESERVED'
+        return Response(self.get_data(output), status=status.HTTP_200_OK)
+
+class ViewReservations(AppResponse, GenericAPIView):
+    """
+    Reservations view API for user with individual costs and total cost.
+    """
+    serializer_class = ReservationsViewSerializer
+
+    @swagger_auto_schema(
+        manual_parameters=[auth],
+    )
+    def get(self, request, format=None):
+        output = dict()
+        user_obj = request.user
+        resv_obj = Reservations.objects.select_related('spot').filter(user=user_obj)
+        total_cost = 0
+        res = list()
+        for r_obj in resv_obj:
+            result = dict()
+            result['duration'] = r_obj.duration
+            result['spot_id'] = r_obj.spot.id
+            result['spot_cost_per_hr'] = r_obj.spot.cost_per_hr
+            total_cost += (r_obj.duration * r_obj.spot.cost_per_hr)
+            res.append(result)
+        output['total_cost'] = total_cost
+        output['spots'] = res
         return Response(self.get_data(output), status=status.HTTP_200_OK)
