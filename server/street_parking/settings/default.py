@@ -72,6 +72,7 @@ class Default(Configuration):
         'apps.user',
         'apps.authentication',
         'apps.reservations',
+        'apps.parkSpot',
     ]
 
     AUTH_USER_MODEL = 'user.User'

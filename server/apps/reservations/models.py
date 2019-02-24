@@ -7,5 +7,5 @@ from apps.parkSpot.models import parkingSpot
 
 class Reservations(baseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    spot = models.ForeignKey(parkingSpot, on_delete=models.DO_NOTHING)
+    spot = models.ForeignKey('parkSpot.parkingSpot', on_delete=models.DO_NOTHING)
     duration = models.IntegerField('time peroid of reservation in hours')
