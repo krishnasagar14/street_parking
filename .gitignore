@@ -10,3 +10,5 @@ db.sqlite3
 
 # IDE directories
 .idea/
+
+server/street_parking/settings/sk.txt
