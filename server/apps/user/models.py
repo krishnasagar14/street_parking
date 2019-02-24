@@ -19,7 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                           db_index=True)
     email = models.EmailField('Email Address', unique=True, blank=False)
     first_name = models.CharField('First Name', max_length=100, blank=False)
-    last_name = models.CharField('Last Name', max_length=100, blank=False)
+    last_name = models.CharField('Last Name', max_length=100, blank=True)
     date_joined = models.DateTimeField('Joining Date', auto_now_add=True)
     is_active = models.BooleanField('Is User Active', default=True)
     mobile_no = models.CharField('Mobile Number', max_length=12, blank=True)
