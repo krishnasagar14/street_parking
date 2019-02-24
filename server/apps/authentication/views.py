@@ -8,10 +8,10 @@ from core.views import AppResponse
 from core import JWT_tokenizer, KEY_AUDIENCE
 from common.serializers import GenericRespSerializer
 from common.helpers import check_user_staff_superuser, is_user_active
-from .serializers import LoginReqSerializer, LoginRespSerializer
+from .serializers import LoginReqSerializer, LoginRespSerializer, RegisterSerializer
 # Create your views here.
 
-class Login(AppResponse, GenericAPIView):
+class LoginView(AppResponse, GenericAPIView):
     """
     Login View serving /login endpoint for portal's users.
     """
@@ -50,3 +50,29 @@ class Login(AppResponse, GenericAPIView):
         else:
             output['message'] = 'INVALID_CREDENTIALS'
             return _resp_400()
+
+class SignupView(AppResponse, GenericAPIView):
+    """
+    This is user registration API for user signup into portal
+    """
+    authentication_classes = ()
+    serializer_class = RegisterSerializer
+
+    @swagger_auto_schema(
+        responses={
+            200: GenericRespSerializer,
+            400: GenericRespSerializer,
+        }
+    )
+    def post(self, request, format=None):
+        output =dict()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            output['message'] = 'USER_REGISTER_SUCCESS'
+            return Response(self.get_data(output), status=status.HTTP_201_CREATED)
+        else:
+            output['message'] = 'REQUEST_ERROR'
+            output['error'] = serializer.errors
+            return Response(self.get_data(output), status=status.HTTP_400_BAD_REQUEST)
