@@ -5,14 +5,15 @@ from .helpers import *
 from apps.user.models import User
 # Create your tests here.
 
+USER_DATA = {
+    'email': 'test_user1@mailinator.com',
+    'first_name': 'test_user1',
+    'last_name': 'user1',
+    'mobile_no': '1111111',
+}
+
 def prepare_dummy_user_data():
-    user_data = {
-        'email': 'test_user1@mailinator.com',
-        'first_name': 'test_user1',
-        'last_name': 'user1',
-        'mobile_no': '1111111',
-    }
-    user_obj = User.objects.create(**user_data)
+    user_obj = User.objects.create(**USER_DATA)
     user_obj.set_password('test123')
     user_obj.save()
 
