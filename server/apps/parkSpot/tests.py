@@ -9,6 +9,13 @@ from apps.user.models import User
 
 # Create your tests here.
 
+class ModelTest(TestCase):
+    def test_model(self):
+        spot_obj = parkingSpot.objects.all()
+        self.assertGreaterEqual(len(spot_obj), 0)
+        print("Spot parking model test success")
+
+
 class ApiTests(TestCase):
     factory = APIRequestFactory()
 
