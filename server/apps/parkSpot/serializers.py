@@ -8,7 +8,7 @@ class SpotModelSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = parkingSpot
-        fields = ['lat', 'longi', 'spot_addr', 'cost_per_hr']
+        fields = ['id', 'lat', 'longi', 'spot_addr', 'cost_per_hr']
 
 class SpotAvailSerializer(serializers.Serializer):
     """

@@ -42,6 +42,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('{}auth/'.format(V0_API_PATH), include(('apps.authentication.urls', 'authentication'), namespace='authentication')),
     path('{}street/'.format(V0_API_PATH), include(('apps.parkSpot.urls', 'parkSpot'), namespace='parkSpot')),
+    path('{}reserve/'.format(V0_API_PATH), include(('apps.reservations.urls', 'reservation'), namespace='reservation')),
 ]
 
 urlpatterns.append(
