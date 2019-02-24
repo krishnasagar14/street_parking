@@ -62,11 +62,8 @@ class BearerAuthentication(BaseAuthentication):
         auth = get_auth_header_value(request)
         auth = auth.split()
 
-        try:
-            if auth[0].title() != self.keyword:
-                raise exceptions.AuthenticationFailed('NO_BEARER_FOUND')
-        except Exception as e:
-                raise exceptions.AuthenticationFailed('INVALID_AUTH_MECHANISM')
+        if auth[0].title() != self.keyword.encode('utf-8'):
+            raise exceptions.AuthenticationFailed('INVALID_AUTH_MECHANISM')
 
         token = None
         try:
