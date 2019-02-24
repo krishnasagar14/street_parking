@@ -40,7 +40,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('{}auth/'.format(V0_API_PATH), include(('apps.authentication.urls', 'authentication'), namespace='authentication'))
+    path('{}auth/'.format(V0_API_PATH), include(('apps.authentication.urls', 'authentication'), namespace='authentication')),
+    path('{}street/'.format(V0_API_PATH), include(('apps.parkSpot.urls', 'parkSpot'), namespace='parkSpot')),
 ]
 
 urlpatterns.append(
