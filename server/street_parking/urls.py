@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import sys
+
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -20,6 +22,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework import permissions
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+
+from .db_setup import insert_street_spots_data
 
 V0_API_PATH = 'api/v0/'
 
@@ -55,3 +59,7 @@ urlpatterns.append(
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 )
 urlpatterns += staticfiles_urlpatterns()
+
+
+if 'runserver' in sys.argv:
+    insert_street_spots_data()
