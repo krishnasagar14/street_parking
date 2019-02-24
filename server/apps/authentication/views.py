@@ -40,7 +40,7 @@ class Login(AppResponse, GenericAPIView):
                 return _resp_400()
             if not is_user_active(user):
                 output['message'] = 'USER_NOT_FOUND'
-                return _resp_400()  
+                return _resp_400()
             payload = {
                 KEY_AUDIENCE: user.id.hex
             }

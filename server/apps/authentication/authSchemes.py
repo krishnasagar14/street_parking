@@ -3,7 +3,7 @@ from rest_framework import HTTP_HEADER_ENCODING, exceptions, status
 from django.utils.six import text_type
 
 from apps.user.models import User
-from core import JWT_tokenizer
+from core import JWT_tokenizer, KEY_AUDIENCE
 
 def get_auth_header_value(request):
     """
@@ -48,7 +48,14 @@ class BearerAuthentication(BaseAuthentication):
             raise exceptions.AuthenticationFailed('INVALID_TOKEN')
         if not token_data:
             raise exceptions.AuthenticationFailed('NO_TOKEN_FOUND')
-        # XXX (Krishnasagar): Need to fetch user record from user table.
+
+        try:
+            user_id = token_data.get(KEY_AUDIENCE, '')
+            user = User.objects.filter(pk=user_id).first()
+        except Exception as e:
+            raise exceptions.AuthenticationFailed('INCORRECT_TOKEN_DATA')
+        if not user:
+            raise exceptions.AuthenticationFailed('NO_USER_FOUND')
         return (user, token_data)
 
     def authenticate(self, request):
