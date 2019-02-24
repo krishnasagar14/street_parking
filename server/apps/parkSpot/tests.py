@@ -28,16 +28,22 @@ class ApiTests(TestCase):
     def test_search_spots(self):
         user_obj = User.objects.filter(email=USER_DATA['email']).first()
         view = SearchParkingSpot.as_view()
+        payload = {
+            KEY_AUDIENCE: user_obj.id.hex
+        }
+        token = JWT_tokenizer.tokenize(payload)
+
         req = self.factory.get('/spots/search/')
         resp = view(req)
         st_code = resp.status_code
         self.assertEqual(st_code, 401)
 
+        req = self.factory.get('/spots/search/', HTTP_AUTHORIZATION='Bearer '+ token)
+        resp = view(req)
+        st_code = resp.status_code
+        self.assertEqual(st_code, 400)
+
         url = '/spots/search/?radius={}&Latitude={}&Longitude={}'.format(20, 1, 36)
-        payload = {
-            KEY_AUDIENCE: user_obj.id.hex
-        }
-        token = JWT_tokenizer.tokenize(payload)
         req = self.factory.get(url, HTTP_AUTHORIZATION='Bearer '+ token)
         resp = view(req)
         st_code = resp.status_code
