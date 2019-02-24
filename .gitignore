@@ -12,3 +12,7 @@ db.sqlite3
 .idea/
 
 server/street_parking/settings/sk.txt
+
+# coverage.py files ignored
+.coverage
+server/htmlcov/
