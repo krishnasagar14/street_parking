@@ -61,5 +61,5 @@ urlpatterns.append(
 urlpatterns += staticfiles_urlpatterns()
 
 
-if 'runserver' in sys.argv:
+if 'runserver' in sys.argv or 'test' in sys.argv:
     insert_street_spots_data()
