@@ -9,6 +9,7 @@ from common.parameters import auth
 from .serializers import ReserveSpotSerializer, ReservationsViewSerializer
 from apps.parkSpot.models import parkingSpot
 from .models import Reservations
+from .parameters import reserve_id
 
 # Create your views here.
 
@@ -88,4 +89,32 @@ class ViewReservations(AppResponse, GenericAPIView):
             res.append(result)
         output['total_cost'] = total_cost
         output['spots'] = res
+        return Response(self.get_data(output), status=status.HTTP_200_OK)
+
+class CancelReservations(AppResponse, GenericAPIView):
+    """
+    Cancel reservation API for user
+    """
+    serializer_class = None
+
+    @swagger_auto_schema(
+        manual_parameters=[auth, reserve_id],
+        responses={
+            200: GenericRespSerializer,
+            400: GenericRespSerializer,
+        }
+    )
+    def delete(self, request, format=None):
+        output = dict()
+        try:
+            resv_id = request.GET['reserve_id']
+        except Exception as e:
+            output['message'] = 'NO_RESERVE_ID'
+            return Response(self.get_data(output), status=status.HTTP_400_BAD_REQUEST)
+        resv_obj = Reservations.objects.select_related('spot').filter(pk=resv_id).first()
+        spot_obj = resv_obj.spot
+        spot_obj.is_reserved = False
+        spot_obj.save()
+        resv_obj.delete()
+        output['message'] = 'CANCEL_SUCCESS'
         return Response(self.get_data(output), status=status.HTTP_200_OK)
