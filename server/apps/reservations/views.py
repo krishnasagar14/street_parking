@@ -54,11 +54,12 @@ class StreetSpotReservation(AppResponse, GenericAPIView):
         if spot_obj.is_reserved:
             return _response_400('SPOT_IS_ALREADY_RESERVED')
 
-        Reservations.objects.create(user=user_obj, spot=spot_obj, duration=time_period)
+        resv_obj = Reservations.objects.create(user=user_obj, spot=spot_obj, duration=time_period)
         spot_obj.is_reserved = True
         spot_obj.save()
 
         output['message'] = 'SPOT_RESERVED'
+        output['reserve_id'] = resv_obj.id
         return Response(self.get_data(output), status=status.HTTP_200_OK)
 
 class ViewReservations(AppResponse, GenericAPIView):
@@ -78,6 +79,7 @@ class ViewReservations(AppResponse, GenericAPIView):
         res = list()
         for r_obj in resv_obj:
             result = dict()
+            result['reserve_id'] = r_obj.id
             result['duration'] = r_obj.duration
             result['spot_id'] = r_obj.spot.id
             result['spot_cost_per_hr'] = r_obj.spot.cost_per_hr
