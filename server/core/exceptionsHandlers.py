@@ -11,6 +11,8 @@ def ApplnExceptionHandler(exc, context):
         data = response.data.copy()
         response.data.clear()
         new_response = response.data['data'] = dict()
+        if 'detail' in data.keys():
+            new_response['message'] = data['detail']
         if 'error' in data.keys():
             new_response['message'] = 'INTERNAL_SERVER_ERROR'
             new_response['error'] = data.get('error')
