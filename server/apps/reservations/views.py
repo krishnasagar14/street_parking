@@ -106,12 +106,17 @@ class CancelReservations(AppResponse, GenericAPIView):
     )
     def delete(self, request, format=None):
         output = dict()
+
         try:
             resv_id = request.GET['reserve_id']
         except Exception as e:
             output['message'] = 'NO_RESERVE_ID'
             return Response(self.get_data(output), status=status.HTTP_400_BAD_REQUEST)
         resv_obj = Reservations.objects.select_related('spot').filter(pk=resv_id).first()
+        if not resv_obj:
+            output['message'] = 'WRONG_RESERVE_ID'
+            return Response(self.get_data(output), status=status.HTTP_400_BAD_REQUEST)
+
         spot_obj = resv_obj.spot
         spot_obj.is_reserved = False
         spot_obj.save()
