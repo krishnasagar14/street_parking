@@ -1,3 +1,7 @@
+import math
+import datetime
+import pytz
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import exceptions, status
@@ -10,6 +14,20 @@ from .serializers import ReserveSpotSerializer, ReservationsViewSerializer
 from apps.parkSpot.models import parkingSpot
 from .models import Reservations
 from .parameters import reserve_id
+
+
+def calculate_reservation_spot_cost(resv_obj):
+    """
+    Helper to calculate cost of reserved spot.
+    It will calculate time of reservation from current time - reservation creation time in hours
+    then, cost = time of reservation * cost of spot per hour
+    :param resv_obj: Reservations model obj containing reservation details
+    :return: cost amount rounded off to next integer and reserved time in hours rounded to next integer
+    """
+    time_diff = datetime.datetime.now(tz=pytz.UTC) - resv_obj.created_at
+    time_diff_hrs = math.ceil(time_diff.total_seconds() / (60 * 60))
+    cost = time_diff_hrs * resv_obj.spot.cost_per_hr
+    return (cost, time_diff_hrs)
 
 # Create your views here.
 
@@ -81,10 +99,11 @@ class ViewReservations(AppResponse, GenericAPIView):
         for r_obj in resv_obj:
             result = dict()
             result['reserve_id'] = r_obj.id
-            result['duration'] = r_obj.duration
+            cost, time_diff_hrs = calculate_reservation_spot_cost(r_obj)
+            result['duration'] = time_diff_hrs
             result['spot_id'] = r_obj.spot.id
             result['spot_cost_per_hr'] = r_obj.spot.cost_per_hr
-            result['cost_per_spot'] = (r_obj.duration * r_obj.spot.cost_per_hr)
+            result['cost_per_spot'] = cost
             total_cost += result['cost_per_spot']
             res.append(result)
         output['total_cost'] = total_cost
@@ -120,6 +139,8 @@ class CancelReservations(AppResponse, GenericAPIView):
         spot_obj = resv_obj.spot
         spot_obj.is_reserved = False
         spot_obj.save()
+        cost, _ = calculate_reservation_spot_cost(resv_obj)
         resv_obj.delete()
         output['message'] = 'CANCEL_SUCCESS'
+        output['cost'] = cost
         return Response(self.get_data(output), status=status.HTTP_200_OK)
