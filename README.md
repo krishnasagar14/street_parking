@@ -20,7 +20,7 @@ It serves for a portal/ client/ app via REST API which includes:
 1. REST pattern is utilized via django rest framework.
 2. Above services are modular, tied up into project via Django settings to form string of services.
 3. Database design:
-Please follow: 
+Please follow and look into: ER_diagram.png file
 
 
 ## Technology used
