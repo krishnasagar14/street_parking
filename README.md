@@ -50,6 +50,8 @@ This project needs basic pythonic installations on your OS platforms:
 1. Execute setup.sh script file to setup MySql database.
 2. Execute start.sh script file to start API service via django.
 3. You can execute and check unit tests via executing tests.sh script file.
+4. Access API swagger docs at : http://localhost:8000/docs
+5. Street spots data is pre-populated.
 
 ## Unit tests coverage:
 
