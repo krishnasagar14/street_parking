@@ -1,6 +1,6 @@
 # Street Parking Spot Reservation
 
-This repository is for street spot parking reservation service to enable vehicle owners (portal owners) reserve street parking spot.
+This repository is for street spot parking reservation service to enable vehicle owners (portal users) reserve street parking spot.
 It serves for a portal via REST API which includes:
 
 1. User services - 
