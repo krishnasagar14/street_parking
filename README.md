@@ -52,6 +52,7 @@ This project needs basic pythonic installations on your OS platforms:
 3. You can execute and check unit tests via executing tests.sh script file.
 4. Access API swagger docs at : http://localhost:8000/docs
 5. Street spots data is pre-populated.
+6. Application configs is divided as per sandbox - local, prod(for production)
 
 ## Unit tests coverage:
 
