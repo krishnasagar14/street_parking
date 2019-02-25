@@ -1,15 +1,16 @@
 # Street Parking Spot Reservation
 
 This repository is for street spot parking reservation service to enable vehicle owners (portal users) reserve street parking spot.
-It serves for a portal via REST API which includes:
+It serves for a portal/ client/ app via REST API which includes:
 
 1. User services - 
    portal registration and portal login, 
+   portal login is delivered with JWT token for other authorized protected services
 2. Authentication services - 
-   JWT bearer authorization, 
+   Json Web Token(JWT) bearer authorization, 6hours expiry of token
 3. Parking spot services - 
-   view and search available spots, 
-4. Reservation services - 
+   view and search available spots (Authorization protected), 
+4. Reservation services (Authorization protected) - 
    reserve spot and cancel spot, 
    view cost of reservation
 
