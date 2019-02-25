@@ -32,7 +32,7 @@ else:
 LOG_DIR_PATH = os.path.join(PRODUCT_PATH, LOG_DIR_NAME)
 
 if not os.path.isdir(LOG_DIR_PATH):
-    os.mkdir(LOG_DIR_PATH, mode=0x577)
+    os.makedirs(LOG_DIR_PATH, mode=0x577)
 
 class Default(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
