@@ -42,8 +42,22 @@ class ApiTests(TestCase):
 
     def test_reserve_spot(self):
         view = StreetSpotReservation.as_view()
+        data = {
+            'spot_id': self.spot_obj.id.hex
+        }
+        data['duration'] = 1
+        req = self.factory.post('/spot/', data, HTTP_AUTHORIZATION='Bearer ' + self.token)
+        resp = view(req)
+        st_code = resp.status_code
+        self.assertEqual(st_code, 200)
+        rdata = resp.data.get('data')
+        self.assertEqual(rdata['message'], 'SPOT_RESERVED')
+
+        print("Reserve spot API test success")
+
+    def test_reserve_spot_negative(self):
+        view = StreetSpotReservation.as_view()
         data = {}
-        # Negative tests
         req = self.factory.post('/spot/', data, HTTP_AUTHORIZATION='Bearer ' + self.token)
         resp = view(req)
         st_code = resp.status_code
@@ -56,22 +70,20 @@ class ApiTests(TestCase):
         resp = view(req)
         st_code = resp.status_code
         self.assertEqual(st_code, 400)
+        print("Reserve spot API negative test success")
 
-        # Positive tests
+    def test_reserve_spot_already_reserved(self):
+        view = StreetSpotReservation.as_view()
+        data = {
+            'spot_id': self.spot_obj.id.hex
+        }
         data['duration'] = 1
         req = self.factory.post('/spot/', data, HTTP_AUTHORIZATION='Bearer ' + self.token)
         resp = view(req)
         st_code = resp.status_code
-        self.assertEqual(st_code, 200)
-        rdata = resp.data.get('data')
-        self.assertEqual(rdata['message'], 'SPOT_RESERVED')
-
-        # Negative test for already reserved spot
-        req = self.factory.post('/spot/', data, HTTP_AUTHORIZATION='Bearer ' + self.token)
-        resp = view(req)
-        st_code = resp.status_code
         self.assertEqual(st_code, 400)
-        print("Reserve spot API test success")
+        print("Reserve slready reserved pot API test success")
+
 
     def test_view_reservations(self):
         view = ViewReservations.as_view()
@@ -81,20 +93,26 @@ class ApiTests(TestCase):
         self.assertEqual(st_code, 200)
         print("View reservations API test success")
 
-    def test_cancel_reservation(self):
-        view = CancelReservations.as_view()
+    def _create_dummy_resv_data(self):
         reserv_data = {
             'duration': 1,
             'user': self.user_obj,
             'spot': self.spot_obj,
         }
         resv_obj = Reservations.objects.create(**reserv_data)
+
+    def test_cancel_reservation(self):
+        view = CancelReservations.as_view()
+        self._create_dummy_resv_data()
         req = self.factory.delete('/cancel/?reserve_id={}'.format(resv_obj.id.hex), HTTP_AUTHORIZATION='Bearer ' + self.token)
         resp = view(req)
         st_code = resp.status_code
         self.assertEqual(st_code, 200)
 
-        # Negative tests
+        print("Cancel reservations API test success")
+
+    def test_cancel_reservation_negative(self):
+        self._create_dummy_resv_data()
         req = self.factory.delete('/cancel/', HTTP_AUTHORIZATION='Bearer ' + self.token)
         resp = view(req)
         st_code = resp.status_code
@@ -107,4 +125,4 @@ class ApiTests(TestCase):
         st_code = resp.status_code
         self.assertEqual(st_code, 400)
 
-        print("Cancel reservations API test success")
+        print("Cancel reservations API negative test success")
