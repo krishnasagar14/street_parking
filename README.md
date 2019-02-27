@@ -7,7 +7,7 @@ It serves for a portal/ client/ app via REST API which includes:
    portal registration and portal login, 
    portal login is delivered with JWT token for other authorized protected services
 2. Authentication services - 
-   Json Web Token(JWT) bearer authorization, 6hours expiry of token
+   Json Web Token(JWT) bearer authorization, 12hours expiry of token
 3. Parking spot services - 
    view and search available spots (Authorization protected), 
 4. Reservation services (Authorization protected) - 
@@ -57,7 +57,7 @@ This project needs basic pythonic installations on your OS platforms:
 ## Unit tests coverage:
 
 coverage.py tool is used to generate coverage report. Check steps of using tool in tests.sh script file.
-Current tests coverage is 86%
+Current tests coverage is 87%
 
 ## Future
 
