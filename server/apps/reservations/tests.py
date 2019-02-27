@@ -87,6 +87,7 @@ class ApiTests(TestCase):
 
 
     def test_view_reservations(self):
+        self._create_dummy_resv_data()
         view = ViewReservations.as_view()
         req = self.factory.get('/view/', HTTP_AUTHORIZATION='Bearer ' + self.token)
         resp = view(req)
